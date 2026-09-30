@@ -1,4 +1,5 @@
 FROM php:8.4-cli
+# CACHE BUST v3 - 2026-09-30
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -32,9 +33,9 @@ RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 RUN chmod -R 775 storage bootstrap/cache
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8080
 
-# Start command
-CMD php artisan config:clear && \
-    php artisan migrate --force && \
-    php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+# Start command - use PHP built-in server with proper port
+CMD php artisan config:cache && \
+    php artisan migrate --force || true && \
+    php -S 0.0.0.0:${PORT:-8080} -t public server.php
