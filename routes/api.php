@@ -12,8 +12,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/faculties', [FacultyController::class, 'index']);
     Route::get('/faculties/{id}', [FacultyController::class, 'show']);
 
-    // Room routes
+    // Room routes - SPECIFIC routes MUST come before /rooms/{id}
     Route::get('/rooms', [RoomController::class, 'index']);
+    Route::get('/rooms/status-with-class', [AttendanceController::class, 'getRoomsWithCurrentClass']);
     Route::get('/rooms/{id}', [RoomController::class, 'show']);
 
     // Schedule routes
@@ -29,4 +30,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/attendances/sync', [AttendanceController::class, 'syncOffline']);
     Route::get('/attendances/date/{date}', [AttendanceController::class, 'getByDate']);
     Route::get('/attendances/faculty/{facultyId}', [AttendanceController::class, 'getByFaculty']);
-   Route::get('/rooms/status-with-class', [AttendanceController::class, 'getRoomsWithCurrentClass']);
+
+    // Room status routes
+    Route::get('/room-status/today', [AttendanceController::class, 'getRoomStatusToday']);
+});
