@@ -29,5 +29,4 @@ Route::prefix('v1')->group(function () {
     Route::post('/attendances/sync', [AttendanceController::class, 'syncOffline']);
     Route::get('/attendances/date/{date}', [AttendanceController::class, 'getByDate']);
     Route::get('/attendances/faculty/{facultyId}', [AttendanceController::class, 'getByFaculty']);
-    Route::get('/room-status/today', [AttendanceController::class, 'getRoomStatusToday']);
-});
+   Route::get('/rooms/status-with-class', [AttendanceController::class, 'getRoomsWithCurrentClass']);

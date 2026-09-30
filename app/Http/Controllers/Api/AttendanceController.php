@@ -85,7 +85,6 @@ class AttendanceController extends Controller
                 ->first();
 
             if ($existing) {
-                // Update if the offline record's original_timestamp is newer
                 $existing->update([
                     'status' => $record['status'],
                     'recorded_time' => $record['recorded_time'],
@@ -148,7 +147,6 @@ class AttendanceController extends Controller
         $day = Carbon::now()->format('l');
         $time = Carbon::now()->format('H:i:s');
 
-        // Get all schedules happening right now
         $activeSchedules = Schedule::with(['faculty', 'room'])
             ->where('day', $day)
             ->where('start_time', '<=', $time)
@@ -196,6 +194,76 @@ class AttendanceController extends Controller
             'current_time' => $time,
             'current_day' => $day,
             'data' => $result
+        ]);
+    }
+
+    /**
+     * NEW METHOD: Get rooms with their current OR next class + attendance status.
+     */
+    public function getRoomsWithCurrentClass()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $day = Carbon::now()->format('l');
+        $currentTime = Carbon::now()->format('H:i:s');
+
+        $rooms = \App\Models\Room::orderBy('room_number')->get();
+        $result = [];
+
+        foreach ($rooms as $room) {
+            $todaySchedules = Schedule::with(['faculty'])
+                ->where('room_id', $room->id)
+                ->where('day', $day)
+                ->orderBy('start_time')
+                ->get();
+
+            $currentClass = null;
+            $nextClass = null;
+
+            foreach ($todaySchedules as $schedule) {
+                if ($schedule->start_time <= $currentTime
+                    && $schedule->end_time >= $currentTime) {
+                    $currentClass = $schedule;
+                    break;
+                }
+                if ($schedule->start_time > $currentTime && $nextClass === null) {
+                    $nextClass = $schedule;
+                }
+            }
+
+            $displayClass = $currentClass ?? $nextClass;
+
+            $classData = null;
+            if ($displayClass) {
+                $attendance = Attendance::where('schedule_id', $displayClass->id)
+                    ->where('date', $today)
+                    ->first();
+
+                $classData = [
+                    'schedule_id' => $displayClass->id,
+                    'subject' => $displayClass->subject,
+                    'section' => $displayClass->section,
+                    'faculty' => $displayClass->faculty->name ?? 'Unknown',
+                    'start_time' => $displayClass->start_time,
+                    'end_time' => $displayClass->end_time,
+                    'attendance_status' => $attendance ? $attendance->status : 'not_recorded',
+                    'is_ongoing' => $currentClass !== null,
+                ];
+            }
+
+            $result[] = [
+                'room_id' => $room->id,
+                'room_number' => $room->room_number,
+                'building' => $room->building,
+                'status' => $currentClass ? 'occupied' : 'vacant',
+                'class' => $classData,
+            ];
+        }
+
+        return response()->json([
+            'success' => true,
+            'current_time' => $currentTime,
+            'current_day' => $day,
+            'data' => $result,
         ]);
     }
 }
