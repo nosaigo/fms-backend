@@ -15,11 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// ===== DEBUG ROUTES (temporary) =====
+// ===== DEBUG ROUTES (temporary — remove after fixing) =====
 Route::get('/debug-log', function () {
     $logFile = storage_path('logs/laravel.log');
     if (!file_exists($logFile)) {
-        return response('<pre>No log file found.</pre>');
+        return response('<pre>No log file yet.</pre>');
     }
     $lines = array_slice(file($logFile), -80);
     return response('<pre>' . htmlspecialchars(implode('', $lines)) . '</pre>');
