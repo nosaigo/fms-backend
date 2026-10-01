@@ -12,7 +12,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body style="margin: 0; font-family: 'Figtree', sans-serif; background: #f3f4f6;">
@@ -25,8 +26,10 @@
             {{-- Logo --}}
             <div
                 style="padding: 20px; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 10px;">
-                <img src="{{ asset('images/ksu-logo.png') }}" alt="KSU"
-                    style="width: 40px; height: 40px; border-radius: 8px;">
+                <div
+                    style="width: 40px; height: 40px; background: #4F46E5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px;">
+                    F
+                </div>
                 <div>
                     <div style="font-weight: 700; font-size: 14px;">FMS</div>
                     <div style="font-size: 10px; color: #94a3b8;">Faculty Monitoring</div>
