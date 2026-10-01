@@ -1,5 +1,5 @@
 FROM php:8.4-cli
-# CACHE BUST v5 - 2026-10-01
+# CACHE BUST v6 - 2026-10-01
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -32,9 +32,10 @@ RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions sto
 
 EXPOSE 8080
 
-# Create .env from environment variables, then start Laravel
-CMD php -r "file_put_contents('.env', implode(PHP_EOL, array_map(function(\$v){return \$v.'=\"'.(getenv(\$v) ?: '').'\"';}, ['APP_NAME','APP_ENV','APP_DEBUG','APP_KEY','APP_URL','APP_TIMEZONE','LOG_CHANNEL','DB_CONNECTION','DB_HOST','DB_PORT','DB_DATABASE','DB_USERNAME','DB_PASSWORD','SESSION_DRIVER','SESSION_LIFETIME','SESSION_ENCRYPT','SESSION_PATH','SESSION_DOMAIN','BROADCAST_CONNECTION','FILESYSTEM_DISK','QUEUE_CONNECTION','CACHE_STORE'])).PHP_EOL));" && \
+# Startup script writes .env from environment variables, then starts Laravel
+CMD /bin/sh -c 'printenv | grep -E "^(APP_|DB_|LOG_|SESSION_|MAIL_|CACHE_|QUEUE_|BROADCAST_|FILESYSTEM_)" | awk -F= "{print \$1\"=\"\$2}" > .env && \
+    echo "" >> .env && \
     php artisan config:clear && \
     php artisan config:cache && \
     php artisan migrate --force || true && \
-    php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+    php artisan serve --host=0.0.0.0 --port=${PORT:-8000}'
