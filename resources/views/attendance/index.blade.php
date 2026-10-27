@@ -11,7 +11,7 @@
             <!-- Print Button -->
             <button onclick="window.print()"
                 style="background-color: #4F46E5 !important; color: white !important; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">
-                🖨️ Print Official Logsheet
+                🖨️ Print Logsheet
             </button>
         </div>
     </x-slot>
