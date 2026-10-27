@@ -98,7 +98,6 @@
                                     <th class="pb-2">Subject</th>
                                     <th class="pb-2">Room</th>
                                     <th class="pb-2">Status</th>
-                                    <th class="pb-2">Source</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -115,13 +114,6 @@
                                                 <span class="px-2 py-1 bg-red-100 text-red-800 rounded text-xs font-semibold">Absent</span>
                                             @else
                                                 <span class="px-2 py-1 bg-orange-100 text-orange-800 rounded text-xs font-semibold">On Leave</span>
-                                            @endif
-                                        </td>
-                                        <td class="py-2">
-                                            @if($a->is_offline_record)
-                                                <span class="text-orange-600 text-xs">📱 Offline</span>
-                                            @else
-                                                <span class="text-green-600 text-xs">🌐 Online</span>
                                             @endif
                                         </td>
                                     </tr>
