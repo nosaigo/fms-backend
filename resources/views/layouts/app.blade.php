@@ -8,6 +8,9 @@
 
     <title>{{ config('app.name', 'Faculty Monitoring System') }}</title>
 
+    <!-- Auto-reload page every 10 seconds -->
+    <meta http-equiv="refresh" content="10">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
