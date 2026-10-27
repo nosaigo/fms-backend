@@ -1,4 +1,7 @@
 <x-app-layout>
+    <!-- Auto-reload Attendance Page every 10 seconds -->
+    <meta http-equiv="refresh" content="10">
+
     <x-slot name="header">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -102,7 +105,8 @@
                         @forelse($attendances as $a)
                             <tr style="border-top: 1px solid #e5e7eb; font-size: 14px;">
                                 <td style="padding: 12px 16px;">
-                                    {{ \Carbon\Carbon::parse($a->recorded_time)->format('h:i A') }}</td>
+                                    {{ \Carbon\Carbon::parse($a->recorded_time)->format('h:i A') }}
+                                </td>
                                 <td style="padding: 12px 16px; font-weight: 500;">{{ $a->faculty->name ?? '-' }}</td>
                                 <td style="padding: 12px 16px;">{{ $a->schedule->subject ?? '-' }}</td>
                                 <td style="padding: 12px 16px;">{{ $a->schedule->room->room_number ?? '-' }}</td>
@@ -157,9 +161,11 @@
                 <td style="border: 1px solid #000; padding: 8px;"><strong>Building/Wing:</strong> CEIT Main Building
                 </td>
                 <td style="border: 1px solid #000; padding: 8px;"><strong>Day:</strong>
-                    {{ \Carbon\Carbon::parse($date)->format('l') }}</td>
+                    {{ \Carbon\Carbon::parse($date)->format('l') }}
+                </td>
                 <td style="border: 1px solid #000; padding: 8px;"><strong>Assigned Clerk:</strong>
-                    {{ Auth::user()->name }}</td>
+                    {{ Auth::user()->name }}
+                </td>
             </tr>
         </table>
 
@@ -180,7 +186,8 @@
                     <tr>
                         <td style="border: 1px solid #000; padding: 6px; text-align: center;">{{ $index + 1 }}</td>
                         <td style="border: 1px solid #000; padding: 6px; text-align: center;">
-                            {{ $a->schedule->room->room_number ?? '-' }}</td>
+                            {{ $a->schedule->room->room_number ?? '-' }}
+                        </td>
                         <td style="border: 1px solid #000; padding: 6px; text-align: center;">
                             {{ \Carbon\Carbon::parse($a->schedule->start_time)->format('h:i A') }} -
                             {{ \Carbon\Carbon::parse($a->schedule->end_time)->format('h:i A') }}
