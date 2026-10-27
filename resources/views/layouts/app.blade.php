@@ -19,13 +19,19 @@
     <style>
         @media print {
 
-            /* Hide the sidebar and top header */
+            /* Hide the sidebar, header, and elements marked as no-print */
             aside,
-            header {
+            header,
+            .no-print {
                 display: none !important;
             }
 
-            /* Make the main content full width */
+            /* Show the official print form */
+            .print-only {
+                display: block !important;
+            }
+
+            /* Make the main content full width and clean */
             body,
             html,
             main,
@@ -34,23 +40,14 @@
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white !important;
-                display: block !important;
             }
 
-            /* Remove shadows and borders from tables for a clean look */
-            .bg-white {
-                box-shadow: none !important;
-                border: 1px solid #ccc !important;
-            }
-
-            /* Add a title for the printed page */
-            main::before {
-                content: "Faculty Monitoring System - Attendance Report";
-                display: block;
-                font-size: 20px;
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 20px;
+            /* Force borders on tables for the official logsheet */
+            table,
+            th,
+            td {
+                border: 1px solid #000 !important;
+                border-collapse: collapse !important;
             }
         }
     </style>

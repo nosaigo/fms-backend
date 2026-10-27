@@ -8,12 +8,12 @@
             <!-- Print Button -->
             <button onclick="window.print()"
                 style="background-color: #4F46E5 !important; color: white !important; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">
-                🖨️ Print Report
+                🖨️ Print Official Logsheet
             </button>
         </div>
     </x-slot>
 
-    <div style="padding: 32px;">
+    <div style="padding: 32px;" class="no-print">
         <div style="max-width: 1280px; margin: 0 auto;">
 
             {{-- Stats Cards --}}
@@ -73,18 +73,8 @@
                         </select>
                     </div>
                     <div>
-                        <label style="display:block; font-size:14px; margin-bottom:4px;">Source</label>
-                        <select name="source" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                            <option value="">All Sources</option>
-                            <option value="online" {{ request('source') == 'online' ? 'selected' : '' }}>Online (API)
-                            </option>
-                            <option value="offline" {{ request('source') == 'offline' ? 'selected' : '' }}>Offline
-                                (Synced)</option>
-                        </select>
-                    </div>
-                    <div>
                         <button type="submit"
-                            style="padding: 8px 16px; background-color: #1f2937 !important; color: white !important; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; -webkit-appearance: none;">
+                            style="padding: 8px 16px; background-color: #1f2937; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
                             Filter
                         </button>
                         <a href="{{ route('attendance.index') }}"
@@ -95,28 +85,24 @@
                 </form>
             </div>
 
-            {{-- Table --}}
+            {{-- On-Screen Table --}}
             <div
                 style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
                 <table style="width: 100%; border-collapse: collapse;">
                     <thead style="background: #f9fafb;">
                         <tr style="text-align: left; font-size: 12px; color: #6b7280; text-transform: uppercase;">
                             <th style="padding: 12px 16px;">Time</th>
-                            <th style="padding: 12px 16px;">Date</th>
                             <th style="padding: 12px 16px;">Faculty</th>
                             <th style="padding: 12px 16px;">Subject</th>
                             <th style="padding: 12px 16px;">Room</th>
                             <th style="padding: 12px 16px;">Status</th>
-                            <th style="padding: 12px 16px;">Source</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($attendances as $a)
                             <tr style="border-top: 1px solid #e5e7eb; font-size: 14px;">
                                 <td style="padding: 12px 16px;">
-                                    {{ \Carbon\Carbon::parse($a->recorded_time)->format('h:i A') }}
-                                </td>
-                                <td style="padding: 12px 16px;">{{ $a->date }}</td>
+                                    {{ \Carbon\Carbon::parse($a->recorded_time)->format('h:i A') }}</td>
                                 <td style="padding: 12px 16px; font-weight: 500;">{{ $a->faculty->name ?? '-' }}</td>
                                 <td style="padding: 12px 16px;">{{ $a->schedule->subject ?? '-' }}</td>
                                 <td style="padding: 12px 16px;">{{ $a->schedule->room->room_number ?? '-' }}</td>
@@ -133,17 +119,10 @@
                                             Leave</span>
                                     @endif
                                 </td>
-                                <td style="padding: 12px 16px;">
-                                    @if($a->is_offline_record)
-                                        <span style="color: #ea580c; font-size: 12px;">📱 Offline</span>
-                                    @else
-                                        <span style="color: #16a34a; font-size: 12px;">🌐 Online</span>
-                                    @endif
-                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" style="padding: 32px; text-align: center; color: #6b7280;">
+                                <td colspan="5" style="padding: 32px; text-align: center; color: #6b7280;">
                                     No attendance records found for this date.
                                 </td>
                             </tr>
@@ -152,10 +131,99 @@
                 </table>
             </div>
 
-            <div style="margin-top: 16px;">
+            <div style="margin-top: 16px;" class="no-print">
                 {{ $attendances->links() }}
             </div>
 
         </div>
     </div>
+
+    <!-- ========================================== -->
+    <!-- OFFICIAL PRINT VIEW (HIDDEN ON SCREEN)     -->
+    <!-- ========================================== -->
+    <div class="print-only" style="display: none; padding: 20px;">
+
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="font-size: 18px; font-weight: bold; margin: 0;">KALINGA STATE UNIVERSITY</h1>
+            <h2 style="font-size: 14px; font-weight: bold; margin: 2px 0;">COLLEGE OF ENGINEERING & INFORMATION
+                TECHNOLOGY (CEIT)</h2>
+            <h3 style="font-size: 16px; font-weight: bold; margin: 10px 0;">DAILY FACULTY MONITORED ATTENDANCE LOGSHEET
+            </h3>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 12px;">
+            <tr>
+                <td style="border: 1px solid #000; padding: 8px;"><strong>Date:</strong> {{ $date }}</td>
+                <td style="border: 1px solid #000; padding: 8px;"><strong>Building/Wing:</strong> CEIT Main Building
+                </td>
+                <td style="border: 1px solid #000; padding: 8px;"><strong>Day:</strong>
+                    {{ \Carbon\Carbon::parse($date)->format('l') }}</td>
+                <td style="border: 1px solid #000; padding: 8px;"><strong>Assigned Clerk:</strong>
+                    {{ Auth::user()->name }}</td>
+            </tr>
+        </table>
+
+        <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+                <tr style="background-color: #eee;">
+                    <th style="border: 1px solid #000; padding: 6px; width: 40px;">#</th>
+                    <th style="border: 1px solid #000; padding: 6px;">ROOM NO.</th>
+                    <th style="border: 1px solid #000; padding: 6px;">SCHEDULED TIME</th>
+                    <th style="border: 1px solid #000; padding: 6px;">SUBJECT & SECTION</th>
+                    <th style="border: 1px solid #000; padding: 6px;">ASSIGNED FACULTY NAME</th>
+                    <th style="border: 1px solid #000; padding: 6px; width: 60px;">STATUS (P/A/L)</th>
+                    <th style="border: 1px solid #000; padding: 6px;">REMARKS / ACTUAL TIME CHECKED</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($attendances as $index => $a)
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 6px; text-align: center;">{{ $index + 1 }}</td>
+                        <td style="border: 1px solid #000; padding: 6px; text-align: center;">
+                            {{ $a->schedule->room->room_number ?? '-' }}</td>
+                        <td style="border: 1px solid #000; padding: 6px; text-align: center;">
+                            {{ \Carbon\Carbon::parse($a->schedule->start_time)->format('h:i A') }} -
+                            {{ \Carbon\Carbon::parse($a->schedule->end_time)->format('h:i A') }}
+                        </td>
+                        <td style="border: 1px solid #000; padding: 6px;">{{ $a->schedule->subject ?? '-' }}
+                            ({{ $a->schedule->section ?? '-' }})</td>
+                        <td style="border: 1px solid #000; padding: 6px;">{{ $a->faculty->name ?? '-' }}</td>
+                        <td style="border: 1px solid #000; padding: 6px; text-align: center; font-weight: bold;">
+                            @if($a->status === 'present') P
+                            @elseif($a->status === 'absent') A
+                            @else L
+                            @endif
+                        </td>
+                        <td style="border: 1px solid #000; padding: 6px; text-align: center;">
+                            {{ \Carbon\Carbon::parse($a->recorded_time)->format('h:i A') }}
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" style="border: 1px solid #000; padding: 20px; text-align: center;">
+                            No attendance records found for this date.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        <div style="margin-top: 15px; font-size: 11px; font-style: italic;">
+            STATUS CODES: P = Present | A = Absent | L = On Official Leave /* Verification must be conducted physically
+            during class hours.
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 50px; font-size: 12px;">
+            <div style="text-align: center; width: 250px;">
+                <div style="border-bottom: 1px solid #000; height: 30px;"></div>
+                <div style="margin-top: 5px;">[Name & Signature of Monitoring Clerk]</div>
+                <div>CEIT Monitoring Clerk</div>
+            </div>
+            <div style="text-align: center; width: 250px;">
+                <div style="border-bottom: 1px solid #000; height: 30px;"></div>
+                <div style="margin-top: 5px;">Noted & Approved By</div>
+            </div>
+        </div>
+    </div>
+
 </x-app-layout>
