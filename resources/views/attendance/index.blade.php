@@ -1,8 +1,16 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Attendance Records') }}
-        </h2>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Attendance Records') }}
+            </h2>
+
+            <!-- Print Button -->
+            <button onclick="window.print()"
+                style="background-color: #4F46E5 !important; color: white !important; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">
+                🖨️ Print Report
+            </button>
+        </div>
     </x-slot>
 
     <div style="padding: 32px;">
@@ -106,7 +114,8 @@
                         @forelse($attendances as $a)
                             <tr style="border-top: 1px solid #e5e7eb; font-size: 14px;">
                                 <td style="padding: 12px 16px;">
-                                    {{ \Carbon\Carbon::parse($a->recorded_time)->format('h:i A') }}</td>
+                                    {{ \Carbon\Carbon::parse($a->recorded_time)->format('h:i A') }}
+                                </td>
                                 <td style="padding: 12px 16px;">{{ $a->date }}</td>
                                 <td style="padding: 12px 16px; font-weight: 500;">{{ $a->faculty->name ?? '-' }}</td>
                                 <td style="padding: 12px 16px;">{{ $a->schedule->subject ?? '-' }}</td>

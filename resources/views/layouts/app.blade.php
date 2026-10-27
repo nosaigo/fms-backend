@@ -14,6 +14,46 @@
 
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- CSS for Printing -->
+    <style>
+        @media print {
+
+            /* Hide the sidebar and top header */
+            aside,
+            header {
+                display: none !important;
+            }
+
+            /* Make the main content full width */
+            body,
+            html,
+            main,
+            div {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                display: block !important;
+            }
+
+            /* Remove shadows and borders from tables for a clean look */
+            .bg-white {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+            }
+
+            /* Add a title for the printed page */
+            main::before {
+                content: "Faculty Monitoring System - Attendance Report";
+                display: block;
+                font-size: 20px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
 </head>
 
 <body style="margin: 0; font-family: 'Figtree', sans-serif; background: #f3f4f6;">
