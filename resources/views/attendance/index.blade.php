@@ -148,6 +148,10 @@
     <div class="print-only" style="display: none; padding: 20px;">
 
         <div style="text-align: center; margin-bottom: 20px;">
+            <!-- KSU Logo -->
+            <img src="{{ asset('images/ksu-logo.png') }}" style="height: 60px; margin: 0 auto 5px auto; display: block;"
+                alt="KSU Logo">
+
             <h1 style="font-size: 18px; font-weight: bold; margin: 0;">KALINGA STATE UNIVERSITY</h1>
             <h2 style="font-size: 14px; font-weight: bold; margin: 2px 0;">COLLEGE OF ENGINEERING & INFORMATION
                 TECHNOLOGY (CEIT)</h2>
